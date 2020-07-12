@@ -1,7 +1,5 @@
 # Sangwoo's GraphQL Toy Project With Apollo & React
 
-# Sangwoo's React Toy Project
-
 ## 事前作業
 
 ---
