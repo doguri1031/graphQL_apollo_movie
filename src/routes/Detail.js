@@ -12,8 +12,13 @@ const GET_MOVIE = gql`
             rating
             description_intro
         }
+        suggestions(id: $id) {
+            id
+            medium_cover_image
+        }
     }
 `;
+
 const Container = styled.div`
     height: 100vh;
     background-image: linear-gradient(-45deg, #d754ab, #fd723a);
@@ -23,12 +28,10 @@ const Container = styled.div`
     align-items: center;
     color: white;
 `;
-
 const Column = styled.div`
     margin-left: 10px;
     width: 50%;
 `;
-
 const Title = styled.h1`
     font-size: 65px;
     margin-bottom: 15px;
@@ -48,7 +51,6 @@ const Poster = styled.div`
     background-size: cover;
     background-position: center center;
 `;
-
 export default () => {
     const { id } = useParams();
     const { loading, data } = useQuery(GET_MOVIE, {
@@ -58,16 +60,12 @@ export default () => {
         <Container>
             <Column>
                 <Title>{loading ? 'Loading...' : data.movie.title}</Title>
-                {!loading && data.movie && (
-                    <>
-                        <Subtitle>
-                            {data.movie.language} · {data.movie.rating}
-                        </Subtitle>
-                        <Description>{data.movie.description_intro}</Description>
-                    </>
-                )}
+                <Subtitle>
+                    {data?.movie?.language} · {data?.movie?.rating}
+                </Subtitle>
+                <Description>{data?.movie?.description_intro}</Description>
             </Column>
-            <Poster bg={data && data.movie ? data.movie.medium_cover_image : ''}></Poster>
+            <Poster bg={data?.movie?.medium_cover_image}></Poster>
         </Container>
     );
 };
