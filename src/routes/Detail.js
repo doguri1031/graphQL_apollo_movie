@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
 import styled from 'styled-components';
-
 const GET_MOVIE = gql`
     query getMovie($id: Int!) {
         movie(id: $id) {
@@ -15,7 +14,6 @@ const GET_MOVIE = gql`
         }
     }
 `;
-
 const Container = styled.div`
     height: 100vh;
     background-image: linear-gradient(-45deg, #d754ab, #fd723a);
@@ -28,26 +26,27 @@ const Container = styled.div`
 
 const Column = styled.div`
     margin-left: 10px;
+    width: 50%;
 `;
 
 const Title = styled.h1`
     font-size: 65px;
     margin-bottom: 15px;
 `;
-
 const Subtitle = styled.h4`
     font-size: 35px;
     margin-bottom: 10px;
 `;
-
 const Description = styled.p`
     font-size: 28px;
 `;
-
 const Poster = styled.div`
     width: 25%;
     height: 60%;
     background-color: transparent;
+    background-image: url(${(props) => props.bg});
+    background-size: cover;
+    background-position: center center;
 `;
 
 export default () => {
@@ -58,11 +57,17 @@ export default () => {
     return (
         <Container>
             <Column>
-                <Title>Name</Title>
-                <Subtitle>English · 4.5</Subtitle>
-                <Description>lorem ipsum lalalla </Description>
+                <Title>{loading ? 'Loading...' : data.movie.title}</Title>
+                {!loading && data.movie && (
+                    <>
+                        <Subtitle>
+                            {data.movie.language} · {data.movie.rating}
+                        </Subtitle>
+                        <Description>{data.movie.description_intro}</Description>
+                    </>
+                )}
             </Column>
-            <Poster></Poster>
+            <Poster bg={data && data.movie ? data.movie.medium_cover_image : ''}></Poster>
         </Container>
     );
 };
